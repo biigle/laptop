@@ -26,10 +26,8 @@ RUN php composer.phar config repositories.projects vcs https://github.com/Biodat
     && php composer.phar config repositories.annotations vcs https://github.com/BiodataMiningGroup/biigle-annotations \
     && php composer.phar config repositories.largo vcs https://github.com/BiodataMiningGroup/biigle-largo \
     && php composer.phar config repositories.export vcs https://github.com/BiodataMiningGroup/biigle-export \
-    && php composer.phar config repositories.geo vcs https://github.com/BiodataMiningGroup/biigle-geo \
     && php composer.phar config repositories.color-sort vcs https://github.com/BiodataMiningGroup/biigle-color-sort \
-    && php composer.phar config repositories.laserpoints vcs https://github.com/BiodataMiningGroup/biigle-laserpoints \
-    && php composer.phar config repositories.ananas vcs https://github.com/BiodataMiningGroup/biigle-ananas
+    && php composer.phar config repositories.laserpoints vcs https://github.com/BiodataMiningGroup/biigle-laserpoints
 
 # Include the Composer cache directory to speed up the build.
 COPY cache /root/.composer/cache
@@ -41,10 +39,8 @@ ARG VOLUMES_VERSION=">=1.0"
 ARG ANNOTATIONS_VERSION=">=1.0"
 ARG LARGO_VERSION=">=1.0"
 ARG EXPORT_VERSION=">=1.0"
-ARG GEO_VERSION=">=1.0"
 ARG COLOR_SORT_VERSION=">=1.0"
 ARG LASERPOINTS_VERSION=">=1.0"
-ARG ANANAS_VERSION=">=1.0"
 RUN COMPOSER_AUTH="{\"github-oauth\":{\"github.com\":\"${GITHUB_OAUTH_TOKEN}\"}}" \
     php composer.phar require \
     biigle/projects:${PROJECTS_VERSION} \
@@ -53,10 +49,8 @@ RUN COMPOSER_AUTH="{\"github-oauth\":{\"github.com\":\"${GITHUB_OAUTH_TOKEN}\"}}
     biigle/annotations:${ANNOTATIONS_VERSION} \
     biigle/largo:${LARGO_VERSION} \
     biigle/export:${EXPORT_VERSION} \
-    biigle/geo:${GEO_VERSION} \
     biigle/color-sort:${COLOR_SORT_VERSION} \
     biigle/laserpoints:${LASERPOINTS_VERSION} \
-    biigle/ananas:${ANANAS_VERSION} \
     --prefer-dist --update-no-dev --ignore-platform-reqs
 
 RUN sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Projects\\ProjectsServiceProvider::class,' config/app.php \
@@ -65,10 +59,8 @@ RUN sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Projects\
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Annotations\\AnnotationsServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Largo\\LargoServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Export\\ExportServiceProvider::class,' config/app.php \
-    && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Geo\\GeoServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\ColorSort\\ColorSortServiceProvider::class,' config/app.php \
-    && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Laserpoints\\LaserpointsServiceProvider::class,' config/app.php \
-    && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Ananas\\AnanasServiceProvider::class,' config/app.php
+    && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Laserpoints\\LaserpointsServiceProvider::class,' config/app.php
 
 RUN php artisan projects:publish \
     && php artisan label-trees:publish \
@@ -76,10 +68,15 @@ RUN php artisan projects:publish \
     && php artisan annotations:publish \
     && php artisan largo:publish \
     && php artisan export:publish \
-    && php artisan geo:publish \
     && php artisan color-sort:publish \
-    && php artisan laserpoints:publish \
-    && php artisan ananas:publish
+    && php artisan laserpoints:publish
+
+# Add custom config.
+COPY config/biigle.php /var/www/config/biigle.php
+COPY config/export.php /var/www/config/export.php
+COPY config/filesystems.php /var/www/config/filesystems.php
+COPY config/laserpoints.php /var/www/config/laserpoints.php
+COPY config/volumes.php /var/www/config/volumes.php
 
 RUN php composer.phar dump-autoload -o \
     && rm composer.phar

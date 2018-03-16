@@ -1,4 +1,4 @@
-FROM biigle/app-dist as intermediate
+FROM biigle/app-ots as intermediate
 
 FROM biigle/web
 MAINTAINER Martin Zurowietz <martin@cebitec.uni-bielefeld.de>

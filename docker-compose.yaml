@@ -3,7 +3,7 @@ version: '2.3'
 services:
 
   app:
-    image: biigle/app-dist
+    image: biigle/app-ots
     user: ${USER_ID}:${GROUP_ID}
     restart: always
     depends_on:
@@ -12,27 +12,32 @@ services:
       - /var/www/storage/framework/views:uid=${USER_ID},gid=${GROUP_ID}
     volumes:
       - ./storage:/var/www/storage
+      - type: bind
+        source: /vol/biigle/images
+        target: /vol/images
+        read_only: true
+      - type: bind
+        source: /media/biigle
+        target: /media/biigle
+        read_only: true
 
   web:
-    image: biigle/web-dist
+    image: biigle/web-ots
     restart: always
     depends_on:
       - app
     volumes:
-      - type: bind
-        source: ./certificate
-        target: /etc/letsencrypt/live/example.com
-        read_only: true
       - type: bind
         source: ./storage
         target: /var/www/storage
         read_only: true
     ports:
       - 80:80
-      - 443:443
+    command: nginx -g 'daemon off;' -c /etc/nginx/nginx-no-ssl.conf
 
   worker:
-    image: biigle/worker-dist
+    image: biigle/worker-ots
+    scale: 2
     user: ${USER_ID}:${GROUP_ID}
     restart: always
     depends_on:
@@ -42,7 +47,7 @@ services:
     command: "php -d memory_limit=1G artisan queue:work --queue=high,default --sleep=5 --tries=3 --timeout=0"
 
   scheduler:
-    image: biigle/worker-dist
+    image: biigle/worker-ots
     user: ${USER_ID}:${GROUP_ID}
     restart: always
     depends_on:
