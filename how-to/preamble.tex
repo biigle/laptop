@@ -1,0 +1,101 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Preamble:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% KOMA article class
+% see also:
+% http://mirror.ctan.org/macros/latex/contrib/koma-script/scrguide.pdf
+\documentclass[english]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[final]{microtype}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% use more space for the text (a4)
+\renewcommand{\footskip}{1cm}
+\renewcommand{\textheight}{690pt}
+\renewcommand{\textwidth}{400pt}
+
+% latin modern - 'The fonts, as compared to the CM family,
+% contain a lot of additional characters, mainly accented
+% ones.' http://www.ctan.org/tex-archive/fonts/lm/
+\usepackage{lmodern}
+
+% Linemargin
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage[english]{babel}
+% \usepackage[ngerman]{babel}
+
+% e.g.: \includegraphics ...
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{float}
+
+% e.g. \align ...
+\usepackage{amsmath}
+% prettier fonts
+% \usepackage{mathpazo}
+
+% nicer tables:
+% \usepackage{colortbl}
+\usepackage{booktabs}
+
+% code
+\usepackage{listings}
+\usepackage{color}
+
+\lstset{
+	%backgroundcolor=\color[rgb]{0.95, 0.95, 0.95},
+	xleftmargin=20pt,
+	tabsize=2,
+	rulecolor=,
+	basicstyle=\footnotesize\ttfamily,
+	aboveskip={1\baselineskip},
+	columns=fixed,
+	showstringspaces=false,
+	extendedchars=true,
+	breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	frame=l,
+	numbers=left,
+	numberstyle=\scriptsize\ttfamily,
+	showtabs=false,
+	showspaces=false,
+	showstringspaces=false,
+	identifierstyle=\ttfamily,
+	keywordstyle=\color[rgb]{1.0,0,0},
+	keywordstyle=[1]\color[rgb]{0,0,0.75},
+	keywordstyle=[2]\color[rgb]{1,0.0,0.5},
+	keywordstyle=[3]\color[rgb]{0.127,0.427,0.514},
+	keywordstyle=[4]\color[rgb]{0.4,0.4,0.4},
+	commentstyle=\color[rgb]{0.5,0.5,0.5},%\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.639,0.082,0.082},
+}
+
+% special characters in biblio
+\usepackage{bibgerm}
+
+% advanced tables
+\usepackage{bigdelim}
+\usepackage{multirow}
+\usepackage{longtable}
+
+% rotate
+\usepackage{rotating}
+\def\rot#1{\begin{sideways}#1\end{sideways}}
+
+%paragraph formatting
+\usepackage{parskip}
+
+% always last:
+% e.g. \url, \href, inter-PDF-links ...
+\usepackage{hyperref}
+
+% path for graphics
+\graphicspath{{./img/}}
+
+% defs
