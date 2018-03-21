@@ -12,6 +12,6 @@ return [
     */
     'browser_disks' => [
         'local',
-        'media',
+        // 'media',
     ],
 ];
