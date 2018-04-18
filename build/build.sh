@@ -11,7 +11,7 @@ docker build -f app.dockerfile -t biigle/app-ots \
     --build-arg VOLUMES_VERSION="^2.0" \
     --build-arg ANNOTATIONS_VERSION="^3.0" \
     --build-arg LARGO_VERSION="^2.0" \
-    --build-arg EXPORT_VERSION="^3.0" \
+    --build-arg REPORTS_VERSION="^4.0" \
     --build-arg COLOR_SORT_VERSION="^2.0" \
     --build-arg LASERPOINTS_VERSION="^2.0" \
     .

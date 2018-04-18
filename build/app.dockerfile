@@ -25,7 +25,7 @@ RUN php composer.phar config repositories.projects vcs https://github.com/Biodat
     && php composer.phar config repositories.volumes vcs https://github.com/BiodataMiningGroup/biigle-volumes \
     && php composer.phar config repositories.annotations vcs https://github.com/BiodataMiningGroup/biigle-annotations \
     && php composer.phar config repositories.largo vcs https://github.com/BiodataMiningGroup/biigle-largo \
-    && php composer.phar config repositories.export vcs https://github.com/BiodataMiningGroup/biigle-export \
+    && php composer.phar config repositories.reports vcs https://github.com/BiodataMiningGroup/biigle-reports \
     && php composer.phar config repositories.color-sort vcs https://github.com/BiodataMiningGroup/biigle-color-sort \
     && php composer.phar config repositories.laserpoints vcs https://github.com/BiodataMiningGroup/biigle-laserpoints
 
@@ -38,7 +38,7 @@ ARG LABEL_TREES_VERSION=">=1.0"
 ARG VOLUMES_VERSION=">=1.0"
 ARG ANNOTATIONS_VERSION=">=1.0"
 ARG LARGO_VERSION=">=1.0"
-ARG EXPORT_VERSION=">=1.0"
+ARG REPORTS_VERSION=">=1.0"
 ARG COLOR_SORT_VERSION=">=1.0"
 ARG LASERPOINTS_VERSION=">=1.0"
 RUN COMPOSER_AUTH="{\"github-oauth\":{\"github.com\":\"${GITHUB_OAUTH_TOKEN}\"}}" \
@@ -48,7 +48,7 @@ RUN COMPOSER_AUTH="{\"github-oauth\":{\"github.com\":\"${GITHUB_OAUTH_TOKEN}\"}}
     biigle/volumes:${VOLUMES_VERSION} \
     biigle/annotations:${ANNOTATIONS_VERSION} \
     biigle/largo:${LARGO_VERSION} \
-    biigle/export:${EXPORT_VERSION} \
+    biigle/reports:${EXPORT_VERSION} \
     biigle/color-sort:${COLOR_SORT_VERSION} \
     biigle/laserpoints:${LASERPOINTS_VERSION} \
     --prefer-dist --update-no-dev --ignore-platform-reqs
@@ -58,22 +58,15 @@ RUN sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Projects\
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Volumes\\VolumesServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Annotations\\AnnotationsServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Largo\\LargoServiceProvider::class,' config/app.php \
-    && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Export\\ExportServiceProvider::class,' config/app.php \
+    && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Reports\\ReportsServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\ColorSort\\ColorSortServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Laserpoints\\LaserpointsServiceProvider::class,' config/app.php
 
-RUN php artisan projects:publish \
-    && php artisan label-trees:publish \
-    && php artisan volumes:publish \
-    && php artisan annotations:publish \
-    && php artisan largo:publish \
-    && php artisan export:publish \
-    && php artisan color-sort:publish \
-    && php artisan laserpoints:publish
+RUN php artisan vendor:publish --tag=public
 
 # Add custom config.
 COPY config/biigle.php /var/www/config/biigle.php
-COPY config/export.php /var/www/config/export.php
+COPY config/reports.php /var/www/config/reports.php
 COPY config/filesystems.php /var/www/config/filesystems.php
 COPY config/laserpoints.php /var/www/config/laserpoints.php
 COPY config/volumes.php /var/www/config/volumes.php
