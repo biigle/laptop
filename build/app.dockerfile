@@ -48,7 +48,7 @@ RUN COMPOSER_AUTH="{\"github-oauth\":{\"github.com\":\"${GITHUB_OAUTH_TOKEN}\"}}
     biigle/volumes:${VOLUMES_VERSION} \
     biigle/annotations:${ANNOTATIONS_VERSION} \
     biigle/largo:${LARGO_VERSION} \
-    biigle/reports:${EXPORT_VERSION} \
+    biigle/reports:${REPORTS_VERSION} \
     biigle/color-sort:${COLOR_SORT_VERSION} \
     biigle/laserpoints:${LASERPOINTS_VERSION} \
     --prefer-dist --update-no-dev --ignore-platform-reqs
