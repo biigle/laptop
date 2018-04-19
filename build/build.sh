@@ -3,7 +3,10 @@ set -e
 
 source .env
 
-docker build -f app.dockerfile -t biigle/app-ots \
+# This is the image which is used during build only. It stores and updates the
+# Composer cache which should not be included in the production images.
+# It serves as an intermediate base image for the app, worker and web images.
+docker build -f build.dockerfile -t biigle/build-ots \
     --build-arg TIMEZONE=${APP_TIMEZONE} \
     --build-arg GITHUB_OAUTH_TOKEN=${GITHUB_OAUTH_TOKEN} \
     --build-arg LABEL_TREES_VERSION="^1.0" \
@@ -16,18 +19,14 @@ docker build -f app.dockerfile -t biigle/app-ots \
     --build-arg LASERPOINTS_VERSION="^2.0" \
     .
 
-# Use -s to skip updating the cache.
+# Update the composer cache directory for much faster builds.
+# Use -s to skip updating the cache directory.
 if [ "$1" != "-s" ]; then
-    # Update the composer cache directory for faster builds.
-    ID=$(docker create biigle/app-ots)
+    ID=$(docker create biigle/build-ots)
     docker cp ${ID}:/root/.composer/cache .
     docker rm ${ID}
 fi
 
-# Perform these last because they uses the new biigle/app-ots as intermediate.
-docker build -f worker.dockerfile -t biigle/worker-ots \
-    --build-arg TIMEZONE=${APP_TIMEZONE} \
-    .
-docker build -f web.dockerfile -t biigle/web-ots \
-    --build-arg TIMEZONE=${APP_TIMEZONE} \
-    .
+docker build -f app.dockerfile -t biigle/app-ots .
+docker build -f worker.dockerfile -t biigle/worker-ots .
+docker build -f web.dockerfile -t biigle/web-ots .
