@@ -1,6 +1,6 @@
 # BIIGLE Distribution
 
-This is the production setup of BIIGLE.
+This is the production setup of BIIGLE (fork of [biigle-distribution](https://github.com/BiodataMiningGroup/biigle-distribution)).
 
 ## Installation
 
