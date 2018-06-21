@@ -26,6 +26,7 @@ RUN php composer.phar config repositories.projects vcs https://github.com/biigle
     && php composer.phar config repositories.largo vcs https://github.com/biigle/largo \
     && php composer.phar config repositories.reports vcs https://github.com/biigle/reports \
     && php composer.phar config repositories.color-sort vcs https://github.com/biigle/color-sort \
+    && php composer.phar config repositories.sync vcs https://github.com/biigle/sync \
     && php composer.phar config repositories.laserpoints vcs https://github.com/biigle/laserpoints
 
 # Include the Composer cache directory to speed up the build.
@@ -39,6 +40,7 @@ ARG ANNOTATIONS_VERSION=">=1.0"
 ARG LARGO_VERSION=">=1.0"
 ARG REPORTS_VERSION=">=1.0"
 ARG COLOR_SORT_VERSION=">=1.0"
+ARG SYNC_VERSION=">=1.0"
 ARG LASERPOINTS_VERSION=">=1.0"
 RUN COMPOSER_AUTH="{\"github-oauth\":{\"github.com\":\"${GITHUB_OAUTH_TOKEN}\"}}" \
     php composer.phar require \
@@ -49,6 +51,7 @@ RUN COMPOSER_AUTH="{\"github-oauth\":{\"github.com\":\"${GITHUB_OAUTH_TOKEN}\"}}
         biigle/largo:${LARGO_VERSION} \
         biigle/reports:${REPORTS_VERSION} \
         biigle/color-sort:${COLOR_SORT_VERSION} \
+        biigle/sync:${SYNC_VERSION} \
         biigle/laserpoints:${LASERPOINTS_VERSION} \
         --prefer-dist --update-no-dev --ignore-platform-reqs
 
@@ -59,6 +62,7 @@ RUN sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Projects\
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Largo\\LargoServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Reports\\ReportsServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\ColorSort\\ColorSortServiceProvider::class,' config/app.php \
+    && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Sync\\SyncServiceProvider::class,' config/app.php \
     && sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Laserpoints\\LaserpointsServiceProvider::class,' config/app.php
 
 # Add custom config.

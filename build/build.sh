@@ -18,6 +18,7 @@ docker build -f build.dockerfile -t biigle/build-ots \
     --build-arg LARGO_VERSION="^2.0" \
     --build-arg REPORTS_VERSION="^4.0" \
     --build-arg COLOR_SORT_VERSION="^2.0" \
+    --build-arg SYNC_VERSION="^1.2" \
     --build-arg LASERPOINTS_VERSION="^2.0" \
     .
 
