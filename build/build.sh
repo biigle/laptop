@@ -3,6 +3,8 @@ set -e
 
 source .env
 
+VERSION=${1:-latest}
+
 # This is the image which is used during build only. It stores and updates the
 # Composer cache which should not be included in the production images.
 # It serves as an intermediate base image for the app, worker and web images.
@@ -21,12 +23,10 @@ docker build -f build.dockerfile -t biigle/build-ots \
 
 # Update the composer cache directory for much faster builds.
 # Use -s to skip updating the cache directory.
-if [ "$1" != "-s" ]; then
-    ID=$(docker create biigle/build-ots)
-    docker cp ${ID}:/root/.composer/cache .
-    docker rm ${ID}
-fi
+ID=$(docker create biigle/build-ots)
+docker cp ${ID}:/root/.composer/cache .
+docker rm ${ID}
 
-docker build -f app.dockerfile -t biigle/app-ots .
-docker build -f worker.dockerfile -t biigle/worker-ots .
-docker build -f web.dockerfile -t biigle/web-ots .
+docker build -f app.dockerfile -t biigle/app-ots:$VERSION .
+docker build -f worker.dockerfile -t biigle/worker-ots:$VERSION .
+docker build -f web.dockerfile -t biigle/web-ots:$VERSION .
