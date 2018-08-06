@@ -49,10 +49,10 @@ return [
             'root' => '/vol/images',
         ],
 
-        // 'media' => [
-        //     'driver' => 'local',
-        //     'root' => '/media/biigle',
-        // ],
+        'media' => [
+            'driver' => 'local',
+            'root' => '/media/biigle',
+        ],
 
         // Default storage disk for image tiles.
         'local-tiles' => [
