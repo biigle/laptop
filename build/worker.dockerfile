@@ -1,4 +1,4 @@
-FROM biigle/build-ots AS intermediate
+FROM biigle/build-dist AS intermediate
 
 FROM biigle/worker
 MAINTAINER Martin Zurowietz <martin@cebitec.uni-bielefeld.de>

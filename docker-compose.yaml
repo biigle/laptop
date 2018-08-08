@@ -3,7 +3,7 @@ version: '2.3'
 services:
 
   app:
-    image: biigle/app-ots
+    image: biigle/app-dist
     user: ${USER_ID}:${GROUP_ID}
     restart: always
     depends_on:
@@ -22,7 +22,7 @@ services:
         read_only: true
 
   web:
-    image: biigle/web-ots
+    image: biigle/web-dist
     restart: always
     depends_on:
       - app
@@ -36,7 +36,7 @@ services:
     command: nginx -g 'daemon off;' -c /etc/nginx/nginx-no-ssl.conf
 
   worker:
-    image: biigle/worker-ots
+    image: biigle/worker-dist
     scale: 2
     user: ${USER_ID}:${GROUP_ID}
     restart: always
@@ -47,7 +47,7 @@ services:
     command: "php -d memory_limit=1G artisan queue:work --queue=high,default --sleep=5 --tries=3 --timeout=0"
 
   scheduler:
-    image: biigle/worker-ots
+    image: biigle/worker-dist
     user: ${USER_ID}:${GROUP_ID}
     restart: always
     depends_on:
