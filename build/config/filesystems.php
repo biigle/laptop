@@ -47,11 +47,13 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => '/vol/images',
+            'links' => 'skip',
         ],
 
         'media' => [
             'driver' => 'local',
             'root' => '/media/biigle',
+            'links' => 'skip',
         ],
 
         // Default storage disk for image tiles.
