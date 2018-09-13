@@ -69,7 +69,6 @@ RUN sed -i '/Insert Biigle module service providers/i Biigle\\Modules\\Projects\
 COPY config/biigle.php /var/www/config/biigle.php
 COPY config/reports.php /var/www/config/reports.php
 COPY config/filesystems.php /var/www/config/filesystems.php
-COPY config/laserpoints.php /var/www/config/laserpoints.php
 COPY config/volumes.php /var/www/config/volumes.php
 
 RUN php composer.phar dump-autoload -o && rm composer.phar
