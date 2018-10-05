@@ -35,10 +35,11 @@ Perform these steps on the machine that should run BIIGLE.
    - `APP_KEY` is the secret encryption key. Generate one with: `head -c 32 /dev/urandom | base64`. Then set `APP_KEY=base64:<your_key>`.
    - `APP_URL` is `https://<your_domain>`.
    - `ADMIN_EMAIL` is the email address of the administrator(s) of the application.
+   - `LASER_POINT_LABEL_ID` the ID of the (future) global laser point label
 
 4. If you use an external database system (outside Docker), remove the `database` block from `docker-compose.yaml` and configure the `DB_*` variables in `build/.env`.
 
-5. Put the SSL keychain (`fullchain.pem`) and private key (`privkey.pem`) to `certificate/`.
+5. Put the SSL keychain (`fullchain.pem`) and private key (`privkey.pem`) to `certificate/`. See [here](http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate) for a description of the required contents of the keychain file.
 
 6. Now build the Docker images for production: `cd build && ./build.sh`. You can build the images on a separate machine, too, and transfer them to the production machine using [`docker save`](https://docs.docker.com/engine/reference/commandline/save/) and [`docker load`](https://docs.docker.com/engine/reference/commandline/load/). `build.sh` also supports an optional argument to specify the version tag of the Docker containers to build (e.g. `v2.8.0`). Default is `latest`.
 
@@ -56,10 +57,68 @@ Perform these steps on the machine that should run BIIGLE.
 
 3. If the update requires a database migration, do this:
    1. Put the application in maintenance mode: `docker-compose exec app php artisan down`.
-   2. Do a database backup. This might look along the lines of: `pg_dump -h localhost -U biigle_user -d biigle_db > biigle_db.dump`
+   2. Do a database backup. This might look along the lines of:
+      ```bash
+      docker exec -i $(docker-compose ps -q database) pg_dump -U biigle -d biigle > biigle_db.dump
+      ```
 
 4. Update the running Docker containers: `docker-compose up -d`.
 
 5. If the update requires a database migration, do this:
    1. Run the migrations `docker-compose exec app php artisan migrate`
    2. Turn off the maintenance mode: `docker-compose exec app php artisan up`
+
+6. Run `docker image prune` to delete old Docker images that are no longer required after the update.
+
+## Common tasks
+
+BIIGLE runs as an ensemble of multiple Docker containers (called "services" by Docker Compose).
+
+- `app` runs the BIIGLE PHP application that handles user interactions.
+- `web` accepts HTTP requests, forwards them to the PHP application or serves static files.
+- `worker` executes jobs from the asynchronous queue which are submitted by `app`. This is the only service that runs multiple Docker containers in parallel.
+- `scheduler` runs recurring tasks (similar to cron jobs).
+- `cache` provides the Redis cache that BIIGLE uses.
+- `database` provides the PostgreSQL database that BIIGLE uses.
+
+To interact with these services rather than individual Docker containers, you have to use Docker Compose. Here are some common tasks a maintainer of a BIIGLE instance might perform using Docker Compose.
+
+### Inspect the logs of running containers
+
+```bash
+docker-compose logs [service]
+```
+
+This shows the log file of the `[service]` service. You can use `--tail=[n]` to show only the last `[n]` lines of the log file and `-f` to follow the log file in real time.
+
+### Restart all services
+
+```bash
+docker-compose restart
+```
+
+This may be required if a service crashed or if file system mounts changed.
+
+### Run an artisan command
+
+```bash
+docker-compose exec app php artisan [command]
+```
+
+This runs the artisan command `[command]` in the application service.
+
+### Access the interactive shell
+
+```bash
+docker-compose exec worker php artisan tinker
+```
+
+This opens the interactive PHP shell that you can use to manipulate BIIGLE. The shell only runs in the `worker` service as a debugging mechanism.
+
+### Change the number of worker containers
+
+```bash
+docker-compose up -d --scale worker=[n]
+```
+
+Set the number of worker containers running in parallel to `[n]`. If you want this to persist, set `scale: [n]` for the worker service in `docker-compose.yaml`.
