@@ -62,6 +62,29 @@ return [
             'root' => storage_path('tiles'),
         ],
 
+        'thumbs' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/thumbs'),
+            'url' => env('APP_URL').'/storage/thumbs',
+            'visibility' => 'public',
+        ],
+
+        'largo' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/largo-patches'),
+            'url' => env('APP_URL').'/storage/largo-patches',
+            'visibility' => 'public',
+        ],
+
+        'reports' => [
+            'driver' => 'local',
+            'root' => storage_path('reports'),
+        ],
+
+        'geo-overlays' => [
+            'driver' => 'local',
+            'root' => storage_path('geo-overlays'),
+        ],
     ],
 
 ];

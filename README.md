@@ -1,10 +1,10 @@
 # BIIGLE Distribution
 
-This is the production setup of BIIGLE (fork of [biigle-distribution](https://github.com/BiodataMiningGroup/biigle-distribution)).
+This is the production setup of BIIGLE (fork of [biigle-distribution](https://github.com/biigle/distribution)).
 
 ## Installation
 
-Perform these steps on the machine that should run BIIGLE.
+Perform these steps on the machine that should run BIIGLE. Check out the wiki for an [example](https://github.com/biigle/distribution/wiki) of how to prepare a new machine for the installation of BIIGLE. You also need to [configure Docker](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-docker-for-use-with-github-packages#authenticating-to-github-packages) to authenticate to the GitHub package registry.
 
 1. Create a user for BIIGLE and find out the user and group ID:
    ```bash
@@ -35,7 +35,6 @@ Perform these steps on the machine that should run BIIGLE.
    - `APP_KEY` is the secret encryption key. Generate one with: `head -c 32 /dev/urandom | base64`. Then set `APP_KEY=base64:<your_key>`.
    - `APP_URL` is `https://<your_domain>`.
    - `ADMIN_EMAIL` is the email address of the administrator(s) of the application.
-   - `LASER_POINT_LABEL_ID` the ID of the (future) global laser point label
 
 4. If you use an external database system (outside Docker), remove the `database` block from `docker-compose.yaml` and configure the `DB_*` variables in `build/.env`.
 
@@ -51,7 +50,12 @@ Perform these steps on the machine that should run BIIGLE.
 
 ## Updating
 
-1. Get the newest versions of the `biigle/app`, `biigle/web` and `biigle/worker` images.
+1. Get the newest versions of the Docker images:
+   ```
+   docker pull docker.pkg.github.com/biigle/core/app:latest
+   docker pull docker.pkg.github.com/biigle/core/web:latest
+   docker pull docker.pkg.github.com/biigle/core/worker:latest
+   ```
 
 2. Run `cd build && ./build.sh`. This will fetch and install the newest versions of the BIIGLE modules, according to the version constraints configured in `build.sh`. Again, you can do this on a separate machine, too (see above). In this case the images mentioned above are not required on the production machine.
 
