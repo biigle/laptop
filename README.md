@@ -1,5 +1,7 @@
 # BIIGLE Distribution
 
+**This is the production configuration of the "BIIGLE laptop" of Biodata Mining Group. You can adapt this configuration to install BIIGLE on your own device in a local network.**
+
 This is the production setup of BIIGLE (fork of [biigle-distribution](https://github.com/biigle/distribution)).
 
 ## Installation
