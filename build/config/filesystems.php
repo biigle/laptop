@@ -57,9 +57,11 @@ return [
         ],
 
         // Default storage disk for image tiles.
-        'local-tiles' => [
+        'tiles' => [
             'driver' => 'local',
-            'root' => storage_path('tiles'),
+            'root' => storage_path('app/public/tiles'),
+            'url' => env('APP_URL').'/storage/tiles',
+            'visibility' => 'public',
         ],
 
         'thumbs' => [
@@ -85,6 +87,24 @@ return [
             'driver' => 'local',
             'root' => storage_path('geo-overlays'),
         ],
+
+        'imports' => [
+            'driver' => 'local',
+            'root' => storage_path('imports'),
+        ],
+
+        'laserpoints' => [
+            'driver' => 'local',
+            'root' => storage_path('framework/cache/laserpoints'),
+        ],
+
+        'video-thumbs' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/video-thumbs'),
+            'url' => env('APP_URL').'/storage/video-thumbs',
+            'visibility' => 'public',
+        ],
+
     ],
 
 ];
